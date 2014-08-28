@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (C) 2014 - Simone Martucci <martucci.simone.91@gmail.com>
+  ~ Copyright (C) 2014 - Mattia Mancini <mattia.mancini.1991@gmail.com>
+  ~
+  ~ This file is part of Foundme Studente.
+  ~
+  ~ Foundme Studente is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Foundme Studente is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Foundme Studente.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/alt"
+        android:text="@string/msg"
+        android:id="@+id/btnMsg"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:background="#ff429874"
+        android:textColor="#ffffffff" />
+
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/alt"
+        android:text="@string/notifiche"
+        android:id="@+id/switch_notif"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/btnMsg"
+        android:layout_alignParentStart="true" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#ff429874"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/alt"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/tvNameCoures"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:textColor="#ffffffff" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/alt"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/tvNameProf"
+            android:layout_below="@+id/tvNameCoures"
+            android:layout_alignParentStart="true"
+            android:textColor="#ffffffff" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/alt"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/tvNameAss1"
+            android:layout_below="@+id/tvNameProf"
+            android:layout_alignParentStart="true"
+            android:textColor="#ffffffff" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/alt"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/tvNameAss2"
+            android:layout_below="@+id/tvNameAss1"
+            android:layout_alignParentStart="true"
+            android:textColor="#ffffffff" />
+
+    </LinearLayout>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton"
+        android:src="@drawable/logotv"
+        android:background="#ffffffff"
+        android:layout_toEndOf="@+id/tvNameProf"
+        android:layout_gravity="right"
+        android:contentDescription=""
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/switch_notif" />
+
+</RelativeLayout>
