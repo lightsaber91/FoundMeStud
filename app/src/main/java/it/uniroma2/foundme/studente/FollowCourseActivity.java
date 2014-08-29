@@ -126,7 +126,8 @@ public class FollowCourseActivity extends Activity {
         lvTuttiCorsi.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                alertMessage(courses[position]);
+                if(!courses[position].equalsIgnoreCase(Variables_it.NO_COURSE))
+                    alertMessage(courses[position]);
             }
         });
 

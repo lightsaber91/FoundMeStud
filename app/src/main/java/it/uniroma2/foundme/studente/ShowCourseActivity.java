@@ -74,7 +74,6 @@ public class ShowCourseActivity extends Activity {
         Bundle passed = getIntent().getExtras();
         Sid = passed.getString(Variables_it.ID);
 
-        //new getCourses().execute(Sid);
         try {
             getCourse(true);
         } catch (ExecutionException e) {
@@ -124,11 +123,11 @@ public class ShowCourseActivity extends Activity {
         lvCorsiSeguiti.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(context, CourseActivity.class);
-                i.putExtra(Variables_it.COURSE, courses[position]);
-                ((Activity)context).startActivity(i);
-
+                if(!courses[position].equalsIgnoreCase(Variables_it.NO_COURSE)) {
+                    Intent i = new Intent(context, CourseActivity.class);
+                    i.putExtra(Variables_it.COURSE, courses[position]);
+                    ((Activity) context).startActivity(i);
+                }
             }
         });
 
