@@ -92,7 +92,6 @@ public class CourseActivity extends Activity {
         pref = SPEditor.init(CourseActivity.this.getApplicationContext());
         Sid = SPEditor.getID(pref);
 
-        //new getCourseInfo().execute(Title, Prof, Sid);
         try {
             manageInfo(Title, Prof, Sid);
         } catch (ExecutionException e) {
@@ -105,6 +104,14 @@ public class CourseActivity extends Activity {
             public void onClick(View arg0) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Variables_it.SITE_TV));
                 startActivity(browserIntent);
+            }
+        });
+
+        msg.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                Intent i = new Intent(CourseActivity.this, ReadMessageActivity.class);
+                i.putExtra(Variables_it.COURSE, Title);
+                startActivity(i);
             }
         });
     }

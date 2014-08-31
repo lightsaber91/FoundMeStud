@@ -81,8 +81,10 @@ public class Connection extends AsyncTask<String, Void, String[]> {
     @Override
     protected String[] doInBackground(String... params) {
         if(toDo.equalsIgnoreCase(Variables_it.REGIS)) {
-            if (!RegistrationActivity.GoogleCloudRegistration())
+            String regid = RegistrationActivity.GoogleCloudRegistration();
+            if (regid == null)
                 return new String[]{Variables_it.FAILED_GCM};
+            else params[10] = regid;
         }
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
         for (int i = 1; i < params.length; i = i + 2) {
@@ -149,8 +151,11 @@ public class Connection extends AsyncTask<String, Void, String[]> {
             if (returnMessage.equalsIgnoreCase(Variables_it.NAME)){
                 return new String[]{Variables_it.ERROR};
             }
-            else if(toDo.equalsIgnoreCase(Variables_it.GET)) {
+            else if(toDo.equalsIgnoreCase(Variables_it.GET) && !returnMessage.equalsIgnoreCase(Variables_it.MSG)) {
                 return new String[]{Variables_it.NO_COURSE};
+            }
+            else if(toDo.equalsIgnoreCase(Variables_it.GET) && returnMessage.equalsIgnoreCase(Variables_it.MSG)) {
+                return new String[]{Variables_it.NO_MSG};
             }
             return new String[]{Variables_it.JSON_FAILURE};
         }
@@ -161,8 +166,8 @@ public class Connection extends AsyncTask<String, Void, String[]> {
         if (enProgressDialog) {
             caricamento.dismiss();
             if (!returnMessage.equalsIgnoreCase(Variables_it.NAME) || result[0].equalsIgnoreCase(Variables_it.ERROR)) {
-                if(!returnMessage.equalsIgnoreCase(Variables_it.SHOW) && !returnMessage.equalsIgnoreCase(Variables_it.FOLLOW) && !returnMessage.equalsIgnoreCase(Variables_it.UNFOLLOW)) {
-                    Toast.makeText(context, result[0], Toast.LENGTH_LONG).show();
+                if(!returnMessage.equalsIgnoreCase(Variables_it.SHOW) && !returnMessage.equalsIgnoreCase(Variables_it.FOLLOW) && !returnMessage.equalsIgnoreCase(Variables_it.UNFOLLOW) && !returnMessage.equalsIgnoreCase(Variables_it.MSG)) {
+                    Toast.makeText(context, result[0], Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -170,6 +175,7 @@ public class Connection extends AsyncTask<String, Void, String[]> {
             if(returnMessage.equalsIgnoreCase(Variables_it.SHOW)) ShowCourseActivity.populateView(result);
             if(returnMessage.equalsIgnoreCase(Variables_it.FOLLOW)) FollowCourseActivity.populateView(result);
             if(returnMessage.equalsIgnoreCase(Variables_it.UNFOLLOW)) UnFollowCourseActivity.populateView(result);
+            if(returnMessage.equalsIgnoreCase(Variables_it.MSG)) ReadMessageActivity.populateView(result);
         }
         else if (returnMessage.equalsIgnoreCase(Variables_it.NAME) && toDo.equalsIgnoreCase(Variables_it.LOG) && !result[0].equalsIgnoreCase(Variables_it.ERROR)) {
             SharedPreferences pref = SPEditor.init(context);

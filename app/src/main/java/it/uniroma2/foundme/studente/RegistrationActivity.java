@@ -125,7 +125,7 @@ public class RegistrationActivity extends Activity {
     }
 
     private boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
                 GooglePlayServicesUtil.getErrorDialog(resultCode, this,
@@ -139,7 +139,7 @@ public class RegistrationActivity extends Activity {
         return true;
     }
 
-    public static boolean GoogleCloudRegistration() {
+    public static String GoogleCloudRegistration() {
         try {
             if (gcm == null) {
                 gcm = GoogleCloudMessaging.getInstance(context);
@@ -147,6 +147,7 @@ public class RegistrationActivity extends Activity {
             regid = gcm.register(SENDER_ID);
             pref = SPEditor.init(context);
             SPEditor.setRegID(pref, regid);
+            return regid;
             // You should send the registration ID to your server over HTTP,
             // so it can use GCM/HTTP or CCS to send messages to your app.
             // The request to your server should be authenticated if your app
@@ -158,12 +159,11 @@ public class RegistrationActivity extends Activity {
 
             // Persist the regID - no need to register again.
         } catch (IOException ex) {
-            return false;
+            return null;
             // If there is an error, don't just keep trying to register.
             // Require the user to click a button again, or perform
             // exponential back-off.
         }
-        return true;
     }
 
     private void manageRegistration(String name, String pass, String mail, String id) throws ExecutionException, InterruptedException {

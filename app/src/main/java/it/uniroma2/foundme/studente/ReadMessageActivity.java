@@ -21,41 +21,125 @@
 package it.uniroma2.foundme.studente;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.concurrent.ExecutionException;
 
 
 public class ReadMessageActivity extends Activity {
 
-    ListView lvMessaggi;
+    private static ListView lvMessaggi;
+    private static String Title;
+    private static String[] messages = null;
+    private static Context context;
+    private static SwipeRefreshLayout swipeMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_message);
+        context = this;
 
+        Bundle passed = getIntent().getExtras();
+        Title =  passed.getString(Variables_it.COURSE);
+
+        swipeMsg = (SwipeRefreshLayout) findViewById(R.id.swipe_msg);
+        swipeMsg.setEnabled(false);
         lvMessaggi = (ListView) findViewById(R.id.lvmes);
-    }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.message, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        try {
+            getMsg(Title, true);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    private static void getMsg(String Title, boolean en) throws ExecutionException, InterruptedException {
+        new Connection(context, en, Variables_it.READING, Variables_it.MSG, Variables_it.GET)
+                .execute(Variables_it.SHOW_MSG, Variables_it.COURSE, Title);
+    }
+
+    private static String extractData(String msg) {
+        String[] items = msg.split("_");
+        return "["+items[0]+"] "+items[1];
+    }
+
+    public static void populateView(String[] result){
+        messages = new String[result.length];
+        System.arraycopy(result, 0, messages, 0, result.length);
+        final ArrayList<String> listp = new ArrayList<String>();
+
+        for(int i=0; i<result.length; i++) {
+            listp.add(extractData(messages[i]));
+        }
+        //creo l'adapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listp);
+        //inserisco i dati
+        lvMessaggi.setAdapter(adapter);
+
+        swipeMsg.setColorSchemeColors(0xff429874, 0xffffffff, 0xff429874, 0xffffffff);
+        swipeMsg.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeMsg.setRefreshing(true);
+                (new Handler()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeMsg.setRefreshing(false);
+                        try {
+                            getMsg(Title, false);
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, 3000);
+            }
+        });
+
+        lvMessaggi.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(!messages[position].equalsIgnoreCase(Variables_it.NO_MSG)) {
+                    Intent i = new Intent(context, ShowMsgActivity.class);
+                    i.putExtra(Variables_it.COURSE,Title);
+                    i.putExtra(Variables_it.URL, messages[position]);
+                    i.putExtra(Variables_it.MSG, listp.get(position));
+                    context.startActivity(i);
+                }
+            }
+        });
+
+        lvMessaggi.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem == 0)
+                    swipeMsg.setEnabled(true);
+                else
+                    swipeMsg.setEnabled(false);
+            }
+        });
     }
 }

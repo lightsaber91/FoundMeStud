@@ -33,7 +33,7 @@ public class Variables_it {
     public static final String MODIFYING = "Modifica in corso...";
     public static final String LOGGING_IN = "Accesso in corso...";
     public static final String ADDING = "Aggiunta in corso...";
-    public static final String SENDING = "Invio messaggio in corso...";
+    public static final String READING = "Lettura messaggi in corso...";
     public static final String DELETION = "Cancellazione in corso...";
 
     //Constant Fields
@@ -88,6 +88,7 @@ public class Variables_it {
     public static final String DEL_ACCOUNT = "http://54.187.29.169/android/stud/deleteAcc.php";
     public static final String SHOW_COURSE = "http://54.187.29.169/android/stud/followedCourse.php";
     public static final String DEL_COURSE = "http://54.187.29.169/android/stud/deleteCourse.php";
+    public static final String SHOW_MSG = "http://54.187.29.169/android/stud/readMsg.php";
     public static final String SITE_TV = "http://didatticaweb.uniroma2.it/";
 
 
@@ -96,6 +97,8 @@ public class Variables_it {
     public static final String FAIL_CONNECTION = "Errore: Connessione fallita";
     public static final String JSON_FAILURE = "Errore: Risposta errata";
     public static final String FAILED_GCM = "Failed GCM Register";
+    public static final String MSG_ROOT = "http://54.187.29.169/messaggi/";
+    public static final String URL = "Url";
 
     //Connection Result
     public static final String GET_INFO_OK = "Informazioni ottenute";
@@ -109,5 +112,6 @@ public class Variables_it {
     public static final String SEND_MSG_OK = "Messaggio inviato correttamente";
     public static final String ERROR = "Ops qualcosa è andato storto...";
     public static final String NO_COURSE = "Nessun corso presente";
+    public static final String NO_MSG = "Nessun messaggio presente";
 
 }

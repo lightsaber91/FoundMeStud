@@ -17,8 +17,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with Foundme Studente.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="it.uniroma2.foundme.studente" >
 
@@ -41,9 +40,9 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <activity
-            android:name=".LoginActivity">
-            <intent-filter android:label="@string/app_name_launcher" >>
+        <activity android:name=".LoginActivity" >
+            <intent-filter android:label="@string/app_name_launcher" >
+>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -106,7 +105,10 @@
             android:name=".ChangePswActivity"
             android:label="@string/title_activity_home" >
         </activity>
-
+        <activity
+            android:name=".ShowMsgActivity"
+            android:label="@string/title_activity_home" >
+        </activity>
     </application>
 
 </manifest>
