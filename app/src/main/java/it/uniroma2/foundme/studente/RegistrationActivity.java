@@ -79,8 +79,6 @@ public class RegistrationActivity extends Activity {
     private static String NewId = null;
     private static Context context;
 
-    private static SharedPreferences pref;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,8 +143,6 @@ public class RegistrationActivity extends Activity {
                 gcm = GoogleCloudMessaging.getInstance(context);
             }
             regid = gcm.register(SENDER_ID);
-            pref = SPEditor.init(context);
-            SPEditor.setRegID(pref, regid);
             return regid;
             // You should send the registration ID to your server over HTTP,
             // so it can use GCM/HTTP or CCS to send messages to your app.

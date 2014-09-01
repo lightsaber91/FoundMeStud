@@ -72,7 +72,4 @@ public class SPEditor extends Activity {
         p.edit().putString(GCM, s).apply();
     }
 
-    public static void setRegID(SharedPreferences p, String s) {
-        p.edit().putString(RID, s).apply();
-    }
 }
