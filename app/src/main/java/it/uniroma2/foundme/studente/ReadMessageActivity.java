@@ -76,17 +76,28 @@ public class ReadMessageActivity extends Activity {
     }
 
     private static String extractData(String msg) {
-        String[] items = msg.split("_");
+        String[] items = msg.split(",");
         return "["+items[0]+"] "+items[1];
+    }
+    private static String getMsgTitle(String msg) {
+        String[] items = msg.split(",");
+        return items[1];
     }
 
     public static void populateView(String[] result){
         messages = new String[result.length];
-        System.arraycopy(result, 0, messages, 0, result.length);
         final ArrayList<String> listp = new ArrayList<String>();
 
         for(int i=0; i<result.length; i++) {
-            listp.add(extractData(messages[i]));
+            if (i == 0 && result[0].equalsIgnoreCase(Variables_it.NO_MSG)) {
+                listp.add(result[0]);
+                messages[0] = result[0];
+                break;
+            }
+            String[] items = result[i].split(",");
+            String ap = "["+items[0]+"] "+items[1];
+            listp.add(ap);
+            messages[i] = items[2];
         }
         //creo l'adapter
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listp);
