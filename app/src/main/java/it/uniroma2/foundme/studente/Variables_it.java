@@ -41,13 +41,14 @@ public class Variables_it {
     public static final String FILL_FIELD = "Riempire i campi correttamente";
     public static final String FOLLOW_REQUEST = "Vuoi seguire il corso selezionato?";
     public static final String UNFOLLOW_REQUEST = "Vuoi smettere di seguire il corso selezionato?";
+    public static final String ALREDY_FOLLOWING = "Già segui il corso selezionato";
     public static final String NULL = "NULL";
     public static final String ISO = "iso-8859-1";
     public static final String YES = "SI";
     public static final String NO = "NO";
     public static final String CODE = "code";
     public static final String SHA = "SHA-1";
-    public static final String OPTION = "Opzioni";
+
 
     //To-Do Job String
     public static final String INFOC = "C";
@@ -76,6 +77,9 @@ public class Variables_it {
     public static final String NOTIFICATION = "Notifica";
     public static final String ENABLE = "ON";
     public static final String DISABLE = "OFF";
+    public static final String MID = "MsgId";
+    public static final String VIS = "Visualizzazioni";
+    public static final String TITLE = "Titolo";
 
     //Web Addresses
     public static final String LOGIN = "http://54.187.29.169/android/stud/login.php";
@@ -88,7 +92,8 @@ public class Variables_it {
     public static final String DEL_ACCOUNT = "http://54.187.29.169/android/stud/deleteAcc.php";
     public static final String SHOW_COURSE = "http://54.187.29.169/android/stud/followedCourse.php";
     public static final String DEL_COURSE = "http://54.187.29.169/android/stud/deleteCourse.php";
-    public static final String SHOW_MSG = "http://54.187.29.169/android/stud/readMsg.php";
+    public static final String SHOW_MSG = "http://54.187.29.169/android/stud/getMsgList.php";
+    public static final String READ_MSG = "http://54.187.29.169/android/stud/readMsg.php";
     public static final String SITE_TV = "http://didatticaweb.uniroma2.it/";
 
 
@@ -97,8 +102,6 @@ public class Variables_it {
     public static final String FAIL_CONNECTION = "Errore: Connessione fallita";
     public static final String JSON_FAILURE = "Errore: Risposta errata";
     public static final String FAILED_GCM = "Failed GCM Register";
-    public static final String MSG_ROOT = "http://54.187.29.169/messaggi/";
-    public static final String URL = "Url";
 
     //Connection Result
     public static final String GET_INFO_OK = "Informazioni ottenute";
@@ -113,5 +116,6 @@ public class Variables_it {
     public static final String ERROR = "Ops qualcosa è andato storto...";
     public static final String NO_COURSE = "Nessun corso presente";
     public static final String NO_MSG = "Nessun messaggio presente";
+    public static final String NO_INTERNET = "Nessuna connesione ad internet";
 
 }

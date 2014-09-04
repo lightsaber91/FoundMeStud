@@ -111,6 +111,7 @@ public class CourseActivity extends Activity {
             public void onClick(View arg0) {
                 Intent i = new Intent(CourseActivity.this, ReadMessageActivity.class);
                 i.putExtra(Variables_it.COURSE, Title);
+                i.putExtra(Variables_it.ID, Sid);
                 startActivity(i);
             }
         });

@@ -44,6 +44,7 @@ public class ReadMessageActivity extends Activity {
 
     private static ListView lvMessaggi;
     private static String Title;
+    private static String Sid;
     private static String[] messages = null;
     private static Context context;
     private static SwipeRefreshLayout swipeMsg;
@@ -56,6 +57,7 @@ public class ReadMessageActivity extends Activity {
 
         Bundle passed = getIntent().getExtras();
         Title =  passed.getString(Variables_it.COURSE);
+        Sid = passed.getString(Variables_it.ID);
 
         swipeMsg = (SwipeRefreshLayout) findViewById(R.id.swipe_msg);
         swipeMsg.setEnabled(false);
@@ -94,10 +96,12 @@ public class ReadMessageActivity extends Activity {
                 messages[0] = result[0];
                 break;
             }
-            String[] items = result[i].split(",");
-            String ap = "["+items[0]+"] "+items[1];
-            listp.add(ap);
-            messages[i] = items[2];
+            else {
+                String[] items = result[i].split(",");
+                String ap = "[" + items[0] + "] " + items[1];
+                listp.add(ap);
+                messages[i] = items[2];
+            }
         }
         //creo l'adapter
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listp);
@@ -130,9 +134,10 @@ public class ReadMessageActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(!messages[position].equalsIgnoreCase(Variables_it.NO_MSG)) {
                     Intent i = new Intent(context, ShowMsgActivity.class);
-                    i.putExtra(Variables_it.COURSE,Title);
-                    i.putExtra(Variables_it.URL, messages[position]);
-                    i.putExtra(Variables_it.MSG, listp.get(position));
+                    i.putExtra(Variables_it.COURSE, Title);
+                    i.putExtra(Variables_it.MID, messages[position]);
+                    i.putExtra(Variables_it.ID, Sid);
+                    i.putExtra(Variables_it.TITLE, listp.get(position));
                     context.startActivity(i);
                 }
             }

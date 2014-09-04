@@ -25,7 +25,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
@@ -80,6 +83,12 @@ public class Connection extends AsyncTask<String, Void, String[]> {
 
     @Override
     protected String[] doInBackground(String... params) {
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        if(!isConnected)
+            return new String[]{Variables_it.NO_INTERNET};
+
         if(toDo.equalsIgnoreCase(Variables_it.REGIS)) {
             String regid = RegistrationActivity.GoogleCloudRegistration();
             if (regid == null)
@@ -114,7 +123,14 @@ public class Connection extends AsyncTask<String, Void, String[]> {
             return new String[]{Variables_it.FAIL_CONNECTION};
         }
         try {
-            if(toDo.equalsIgnoreCase(Variables_it.GET)){
+            if(toDo.equalsIgnoreCase(Variables_it.GET) && returnMessage.equalsIgnoreCase(Variables_it.MID)) {
+                json_data = new JSONObject(result.substring(result.indexOf("{"), result.lastIndexOf("}") + 1));
+                String[] received = new String[2];
+                received[0] = json_data.getString(Variables_it.MSG);
+                received[1] = json_data.getString(Variables_it.VIS);
+                return received;
+            }
+            else if(toDo.equalsIgnoreCase(Variables_it.GET) && !returnMessage.equalsIgnoreCase(Variables_it.MID) ){
                 json_data = new JSONObject(result);
                 List<String> list = new ArrayList<String>();
                 for (int i = 0; ; i++) {
@@ -141,6 +157,9 @@ public class Connection extends AsyncTask<String, Void, String[]> {
                 json_data = new JSONObject(result.substring(result.indexOf("{"), result.lastIndexOf("}") + 1));
                 code = (json_data.getInt(Variables_it.CODE));
             }
+            if(returnMessage.equalsIgnoreCase(Variables_it.ADD_COURSE_OK) && code == 2) {
+                return new String[]{Variables_it.ALREDY_FOLLOWING};
+            }
             if (code == 1) {
                 return new String[]{returnMessage};
             } else {
@@ -163,10 +182,16 @@ public class Connection extends AsyncTask<String, Void, String[]> {
 
     @Override
     protected void onPostExecute(String result[]) {
+        if(result[0].equalsIgnoreCase(Variables_it.NO_INTERNET)) {
+            if (enProgressDialog)
+                caricamento.dismiss();
+            Toast.makeText(context, result[0], Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (enProgressDialog) {
             caricamento.dismiss();
             if (!returnMessage.equalsIgnoreCase(Variables_it.NAME) || result[0].equalsIgnoreCase(Variables_it.ERROR)) {
-                if(!returnMessage.equalsIgnoreCase(Variables_it.SHOW) && !returnMessage.equalsIgnoreCase(Variables_it.FOLLOW) && !returnMessage.equalsIgnoreCase(Variables_it.UNFOLLOW) && !returnMessage.equalsIgnoreCase(Variables_it.MSG)) {
+                if(!returnMessage.equalsIgnoreCase(Variables_it.SHOW) && !returnMessage.equalsIgnoreCase(Variables_it.FOLLOW) && !returnMessage.equalsIgnoreCase(Variables_it.UNFOLLOW) && !returnMessage.equalsIgnoreCase(Variables_it.MSG)&& !returnMessage.equalsIgnoreCase(Variables_it.MID)) {
                     Toast.makeText(context, result[0], Toast.LENGTH_SHORT).show();
                 }
             }
@@ -176,6 +201,7 @@ public class Connection extends AsyncTask<String, Void, String[]> {
             if(returnMessage.equalsIgnoreCase(Variables_it.FOLLOW)) FollowCourseActivity.populateView(result);
             if(returnMessage.equalsIgnoreCase(Variables_it.UNFOLLOW)) UnFollowCourseActivity.populateView(result);
             if(returnMessage.equalsIgnoreCase(Variables_it.MSG)) ReadMessageActivity.populateView(result);
+            if(returnMessage.equalsIgnoreCase(Variables_it.MID)) ShowMsgActivity.populateView(result);
         }
         else if (returnMessage.equalsIgnoreCase(Variables_it.NAME) && toDo.equalsIgnoreCase(Variables_it.LOG) && !result[0].equalsIgnoreCase(Variables_it.ERROR)) {
             SharedPreferences pref = SPEditor.init(context);
