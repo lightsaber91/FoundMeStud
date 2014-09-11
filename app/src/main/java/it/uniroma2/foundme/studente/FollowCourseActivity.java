@@ -34,6 +34,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
@@ -52,7 +53,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 
@@ -94,12 +97,27 @@ public class FollowCourseActivity extends Activity {
     public static void populateView(String[] result) {
         courses = new String[result.length];
         System.arraycopy(result, 0, courses, 0, result.length);
-        ArrayList<String> listp = new ArrayList<String>();
+        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
 
-        Collections.addAll(listp, courses);
+        for(int i=0; i<result.length; i++) {
+            Map<String, String> datum = new HashMap<String, String>(2);
+            if (i == 0 && result[0].equalsIgnoreCase(Variables_it.NO_COURSE)) {
+                datum.put(Variables_it.COURSE, result[0]);
+                datum.put(Variables_it.PROF, "");
+                data.add(datum);
+                break;
+            }
+            else {
+                String[] items = result[i].split(",");
+                String ap = items[0]+items[1];
+                datum.put(Variables_it.COURSE, ap);
+                datum.put(Variables_it.PROF, items[2]);
+                data.add(datum);
+            }
+        }
         //creo l'adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, listp);
-        //inserisco i dati
+        SimpleAdapter adapter = new SimpleAdapter(context, data, android.R.layout.simple_list_item_2, new String[] {Variables_it.COURSE,Variables_it.PROF}, new int[] {android.R.id.text1,
+                android.R.id.text2});
         lvTuttiCorsi.setAdapter(adapter);
 
         swipeFollow.setColorSchemeColors(0xff429874, 0xffffffff, 0xff429874, 0xffffffff);

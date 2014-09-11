@@ -80,6 +80,9 @@ public class Variables_it {
     public static final String MID = "MsgId";
     public static final String VIS = "Visualizzazioni";
     public static final String TITLE = "Titolo";
+    public static final String DEPT = "Dipartimento";
+    public static final String FIRSTD = "Triennale";
+    public static final String SECONDD = "Magistrale";
 
     //Web Addresses
     public static final String LOGIN = "http://54.187.29.169/android/stud/login.php";

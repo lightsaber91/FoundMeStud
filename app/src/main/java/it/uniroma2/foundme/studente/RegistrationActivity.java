@@ -28,8 +28,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -53,6 +58,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import static android.widget.ArrayAdapter.createFromResource;
+
 public class RegistrationActivity extends Activity {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -70,6 +77,7 @@ public class RegistrationActivity extends Activity {
     private static EditText etNewMail;
     private static EditText etNewMail2;
     private static EditText etNewId;
+    private static Spinner spDept;
 
     private static String NewUser = null;
     private static String NewPass1 = null;
@@ -77,6 +85,9 @@ public class RegistrationActivity extends Activity {
     private static String NewMail = null;
     private static String NewMail2 = null;
     private static String NewId = null;
+    private static String Dept = null;
+    private String firstDegree = "0";
+    private String secondDegree = "0";
     private static Context context;
 
     @Override
@@ -92,6 +103,33 @@ public class RegistrationActivity extends Activity {
         etNewMail = (EditText) findViewById(R.id.etNewMail);
         etNewMail2 = (EditText) findViewById(R.id.etNewMail2);
         etNewId = (EditText) findViewById(R.id.etNewId);
+        spDept = (Spinner) findViewById(R.id.spDept);
+
+        final ArrayAdapter<CharSequence> adapter = createFromResource(this,
+                R.array.Departments, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spDept.setAdapter(adapter);
+
+        spDept.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            protected Adapter initializedAdapter=null;
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                if(initializedAdapter !=parentView.getAdapter() ) {
+                    initializedAdapter = parentView.getAdapter();
+                    return;
+                }
+
+                Dept = parentView.getItemAtPosition(position).toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                //
+            }
+        });
 
         btSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,11 +143,11 @@ public class RegistrationActivity extends Activity {
 
                 if (checkPlayServices()) {
                     gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
-                    if (!checkLoginData(NewPass1, NewPass2, NewMail, NewMail2)) {
+                    if (!checkLoginData(NewPass1, NewPass2, NewMail, NewMail2, Dept)) {
                         Toast.makeText(getApplicationContext(), Variables_it.FILL_FIELD, Toast.LENGTH_LONG).show();
                     } else {
                         try {
-                            manageRegistration(NewUser, NewPass1, NewMail, NewId);
+                            manageRegistration(NewUser, NewPass1, NewMail, NewId, Dept);
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -137,6 +175,34 @@ public class RegistrationActivity extends Activity {
         return true;
     }
 
+    public void onCheckboxClicked(View view) {
+        // Is the view now checked?
+        boolean checked = ((CheckBox) view).isChecked();
+
+        // Check which checkbox was clicked
+        switch(view.getId()) {
+            case R.id.cbFirstDegree:
+                if (checked) {
+                    ((CheckBox) findViewById(R.id.cbSecondDegree)).setChecked(false);
+                    secondDegree = "0";
+                    firstDegree = "1";
+                }
+                else
+                    firstDegree = "0";
+                break;
+            case R.id.cbSecondDegree:
+                if (checked) {
+                    ((CheckBox) findViewById(R.id.cbFirstDegree)).setChecked(false);
+                    firstDegree = "0";
+                    secondDegree = "1";
+                }
+                else
+                    secondDegree = "0";
+                break;
+
+        }
+    }
+
     public static String GoogleCloudRegistration() {
         try {
             if (gcm == null) {
@@ -162,19 +228,23 @@ public class RegistrationActivity extends Activity {
         }
     }
 
-    private void manageRegistration(String name, String pass, String mail, String id) throws ExecutionException, InterruptedException {
+    private void manageRegistration(String name, String pass, String mail, String id, String dept) throws ExecutionException, InterruptedException {
         pass = computeSHAHash.sha1(pass);
         new Connection(this, true, Variables_it.SIGN_UP, Variables_it.SIGN_UP_OK, Variables_it.REGIS)
-                .execute(Variables_it.REGISTRATION, Variables_it.NAME, name, Variables_it.PASS, pass, Variables_it.MAIL, mail, Variables_it.ID, id, Variables_it.GCMKEY, regid);
+                .execute(Variables_it.REGISTRATION, Variables_it.NAME, name, Variables_it.PASS, pass, Variables_it.MAIL, mail, Variables_it.ID, id, Variables_it.GCMKEY, regid, Variables_it.DEPT, dept, Variables_it.FIRSTD, firstDegree, Variables_it.SECONDD, secondDegree);
     }
 
-    boolean checkLoginData(String pass1, String pass2, String mail1, String mail2) {
-        if (pass1.equals(pass2) && mail1.equals(mail2)) {
-            int l = pass1.length();
-            return l >= 8;
+    boolean checkLoginData(String pass1, String pass2, String mail1, String mail2, String dept) {
+        if(firstDegree.equalsIgnoreCase("1") || secondDegree.equalsIgnoreCase("1")) {
+            if (pass1.equals(pass2) && mail1.equals(mail2) && dept != null && !dept.isEmpty() && !dept.equalsIgnoreCase("")) {
+                int l = pass1.length();
+                return l >= 8;
+            }
+            return false;
         }
         return false;
     }
+
     public static String getmail() {
         return NewMail;
     }

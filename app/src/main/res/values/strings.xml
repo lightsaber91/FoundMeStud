@@ -73,6 +73,9 @@
     <string name="str_action1">edit</string>
     <string name="str_action2">delete</string>
     <string name="str_action3">Action3</string>
+    <string name="reg_dept">\ Seleziona la macroarea</string>
+    <string name="firstDegree">Laurea Triennale</string>
+    <string name="secondDegree">Laurea Magistrale</string>
 
     <!-- Resources -->
     <string name="pref_title_sync_frequency"></string>
