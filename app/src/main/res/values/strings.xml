@@ -76,6 +76,7 @@
     <string name="reg_dept">\ Seleziona la macroarea</string>
     <string name="firstDegree">Laurea Triennale</string>
     <string name="secondDegree">Laurea Magistrale</string>
+    <string name="filter">Filtra per titolo, cfu o docente</string>
 
     <!-- Resources -->
     <string name="pref_title_sync_frequency"></string>

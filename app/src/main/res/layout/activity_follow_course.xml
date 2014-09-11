@@ -43,6 +43,13 @@
             android:textColor="#ffffffff" />
     </LinearLayout>
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etFilter"
+        android:layout_gravity="center_horizontal"
+        android:hint="@string/filter" />
+
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipe_follow"
         android:layout_width="match_parent"

@@ -29,10 +29,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -63,15 +66,17 @@ public class FollowCourseActivity extends Activity {
 
     private static String[] courses = null;
     private static ListView lvTuttiCorsi;
-    private static String title = null, cfu = null, prof = null, Sid = null;
+    private static String title = null, cfu = null, prof = null, Sid = null, filter = null;
     private static SwipeRefreshLayout swipeFollow;
     private static Context context;
+    private static EditText etFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follow_course);
         context = this;
+
         swipeFollow = (SwipeRefreshLayout) findViewById(R.id.swipe_follow);
         swipeFollow.setEnabled(false);
 
@@ -79,6 +84,7 @@ public class FollowCourseActivity extends Activity {
         Sid = passed.getString(Variables_it.ID);
 
         lvTuttiCorsi = (ListView) findViewById(R.id.lvTuttiCorsi);
+        etFilter = (EditText) findViewById(R.id.etFilter);
 
         try {
             getCourse(true);
@@ -116,9 +122,10 @@ public class FollowCourseActivity extends Activity {
             }
         }
         //creo l'adapter
-        SimpleAdapter adapter = new SimpleAdapter(context, data, android.R.layout.simple_list_item_2, new String[] {Variables_it.COURSE,Variables_it.PROF}, new int[] {android.R.id.text1,
+        final SimpleAdapter adapter = new SimpleAdapter(context, data, android.R.layout.simple_list_item_2, new String[] {Variables_it.COURSE,Variables_it.PROF}, new int[] {android.R.id.text1,
                 android.R.id.text2});
         lvTuttiCorsi.setAdapter(adapter);
+        lvTuttiCorsi.setTextFilterEnabled(true);
 
         swipeFollow.setColorSchemeColors(0xff429874, 0xffffffff, 0xff429874, 0xffffffff);
         swipeFollow.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -161,6 +168,19 @@ public class FollowCourseActivity extends Activity {
                     swipeFollow.setEnabled(true);
                 else
                     swipeFollow.setEnabled(false);
+            }
+        });
+
+        etFilter.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.getFilter().filter(s.toString());
             }
         });
     }
